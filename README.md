@@ -1,5 +1,9 @@
 <div align="center">
 
+<img src="images/logo.png" alt="智域 WAF" width="100">
+
+<br>
+
 # 智域 WAF
 
 **AI 驱动的新一代 Web 应用防火墙**
@@ -16,7 +20,7 @@
 
 <br><br>
 
-[核心特性](#-核心特性) · [快速开始](#-快速开始) · [功能对比](#-功能对比) · [部署指南](#-部署指南)
+[核心特性](#-核心特性) · [界面预览](#-界面预览) · [快速开始](#-快速开始) · [功能对比](#-功能对比) · [部署指南](#-部署指南)
 
 </div>
 
@@ -94,6 +98,27 @@ ACME 自动签发 Let's Encrypt 证书，到期自动续期
 </td>
 </tr>
 </table>
+
+---
+
+##   界面预览
+
+<table>
+<tr>
+<td width="50%"><img src="images/login.png" alt="登录页面"></td>
+<td width="50%"><img src="images/attack-logs.png" alt="攻击日志"></td>
+</tr>
+<tr>
+<td width="50%"><img src="images/rules-engine.png" alt="规则引擎"></td>
+<td width="50%"><img src="images/ssh-monitor.png" alt="SSH 监控"></td>
+</tr>
+<tr>
+<td width="50%"><img src="images/threat-intel.png" alt="威胁情报"></td>
+<td width="50%"><img src="images/access-control.png" alt="访问控制"></td>
+</tr>
+</table>
+
+<img src="images/settings.png" alt="系统设置" width="100%">
 
 ---
 
