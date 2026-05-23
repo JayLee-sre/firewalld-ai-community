@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户协议 - ZhiYu-WAF 社区版</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #0a0e1a; color: rgba(255,255,255,0.8); line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .page-bg {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .page-bg::before {
+      content: ''; position: absolute; width: 600px; height: 600px;
+      border-radius: 50%; filter: blur(100px); opacity: 0.25;
+      background: radial-gradient(circle, #6366f1, transparent 70%);
+      top: -200px; right: -100px;
+    }
+    .page-bg::after {
+      content: ''; position: absolute; width: 500px; height: 500px;
+      border-radius: 50%; filter: blur(100px); opacity: 0.15;
+      background: radial-gradient(circle, #8b5cf6, transparent 70%);
+      bottom: -150px; left: -100px;
+    }
+    .page-grid {
+      position: fixed; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .container {
+      max-width: 760px; margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative; z-index: 1;
+    }
+
+    /* 顶部导航 */
+    .top-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: #fff;
+    }
+    .nav-brand img {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-brand .name {
+      font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+    }
+    .nav-back {
+      font-size: 13px; color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      padding: 6px 16px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s;
+    }
+    .nav-back:hover {
+      color: #818cf8;
+      border-color: rgba(99,102,241,0.3);
+      background: rgba(99,102,241,0.08);
+    }
+
+    /* 标题区 */
+    .hero { margin-bottom: 36px; }
+    .hero .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 14px; border-radius: 20px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.2);
+      color: #818cf8; font-size: 11px; font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+    .hero .badge::before {
+      content: ''; width: 5px; height: 5px;
+      border-radius: 50%; background: #6366f1;
+    }
+    .hero h1 {
+      font-size: 34px; font-weight: 800; color: #fff;
+      letter-spacing: -0.8px; line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero .meta {
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    /* 内容卡片 */
+    .content {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 44px 48px;
+      backdrop-filter: blur(10px);
+    }
+    .content h2 {
+      font-size: 16px; font-weight: 700; color: #fff;
+      margin: 36px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .content h2::before {
+      content: '';
+      width: 3px; height: 16px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #6366f1, #8b5cf6);
+      flex-shrink: 0;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p {
+      margin-bottom: 14px; font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.9;
+    }
+    .content ul {
+      margin: 0 0 16px 24px;
+      font-size: 14px; color: rgba(255,255,255,0.6);
+    }
+    .content li {
+      margin-bottom: 8px;
+      padding-left: 4px;
+      line-height: 1.8;
+    }
+    .content li::marker {
+      color: #6366f1;
+    }
+    .content strong {
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    /* 底部 */
+    .page-footer {
+      text-align: center; margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px; color: rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 28px 24px; }
+      .hero h1 { font-size: 26px; }
+      .top-nav { flex-wrap: wrap; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="page-grid"></div>
+  <div class="container">
+    <nav class="top-nav">
+      <a class="nav-brand" href="/">
+        <img src="/logo.png" alt="ZhiYu-WAF" />
+        <span class="name">ZhiYu-WAF</span>
+      </a>
+      <a class="nav-back" href="/">← 返回登录</a>
+    </nav>
+
+    <div class="hero">
+      <span class="badge">法律文件</span>
+      <h1>用户协议</h1>
+      <div class="meta">ZhiYu-WAF 社区版 · 最后更新：2026 年 5 月 16 日</div>
+    </div>
+
+    <div class="content">
+      <h2>一、协议的接受与修改</h2>
+      <p>欢迎您使用ZhiYu-WAF 社区版（以下简称"本产品"）。本协议是您与小睿科技之间关于使用本产品服务的法律协议。请您仔细阅读并充分理解本协议各条款。一旦您注册、登录或以任何方式使用本产品，即表示您同意接受本协议的全部条款。</p>
+      <p>我们保留随时修改本协议的权利。修改后的协议将在本页面公布，继续使用本产品即表示您同意修改后的协议。</p>
+
+      <h2>二、服务内容</h2>
+      <p>本产品是一款 AI 驱动的 Web 应用防火墙（WAF），提供以下核心服务：</p>
+      <ul>
+        <li>基于规则引擎的 Web 攻击检测与拦截</li>
+        <li>基于大语言模型（LLM）的智能威胁分析</li>
+        <li>SSH 暴力破解检测与防护</li>
+        <li>IP 黑白名单访问控制</li>
+        <li>安全态势可视化与攻击日志审计</li>
+      </ul>
+
+      <h2>三、用户义务</h2>
+      <p>在使用本产品过程中，您应遵守以下义务：</p>
+      <ul>
+        <li>遵守中华人民共和国相关法律法规及国际通行的互联网使用惯例</li>
+        <li>不得利用本产品从事任何违法违规活动</li>
+        <li>妥善保管您的账户信息和密码，因您个人原因导致的账户安全问题由您自行承担</li>
+        <li>不得对本产品进行反向工程、反编译或以其他方式尝试获取源代码</li>
+        <li>不得将本产品用于保护非法网站或服务</li>
+      </ul>
+
+      <h2>四、知识产权</h2>
+      <p>本产品及其所有组成部分（包括但不限于软件、技术、程序、界面设计、版面框架、数据等）的知识产权归小睿科技所有。未经书面许可，您不得复制、修改、传播或以其他方式使用本产品的任何部分。</p>
+
+      <h2>五、免责声明</h2>
+      <p>本产品以"现状"提供服务。我们将在商业合理范围内确保服务的稳定性和安全性，但不对以下情况承担责任：</p>
+      <ul>
+        <li>因不可抗力、网络故障、第三方攻击等导致的服务中断</li>
+        <li>因用户未正确配置或使用本产品导致的安全事件</li>
+        <li>本产品无法检测或拦截的未知零日攻击</li>
+        <li>用户使用本产品所保护的网站或服务本身产生的任何法律责任</li>
+      </ul>
+
+      <h2>六、服务变更与终止</h2>
+      <p>我们有权根据业务发展需要，修改、暂停或终止部分或全部服务，并在合理时间内通知用户。若您违反本协议的任何条款，我们有权立即终止向您提供服务。</p>
+
+      <h2>七、争议解决</h2>
+      <p>本协议的签订、执行、解释及争议解决均适用中华人民共和国法律。如双方就本协议产生争议，应首先友好协商解决；协商不成的，任何一方均有权向小睿科技所在地有管辖权的人民法院提起诉讼。</p>
+
+      <h2>八、联系我们</h2>
+      <p>如您对本协议有任何疑问，请通过产品内的反馈渠道与我们联系。</p>
+    </div>
+
+    <div class="page-footer">© 2026 小睿科技 版权所有 · ZhiYu-WAF 社区版</div>
+  </div>
+</body>
+</html>

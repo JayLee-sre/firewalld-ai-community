@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>隐私政策 - ZhiYu-WAF 社区版</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #0a0e1a; color: rgba(255,255,255,0.8); line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .page-bg {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .page-bg::before {
+      content: ''; position: absolute; width: 600px; height: 600px;
+      border-radius: 50%; filter: blur(100px); opacity: 0.25;
+      background: radial-gradient(circle, #6366f1, transparent 70%);
+      top: -200px; right: -100px;
+    }
+    .page-bg::after {
+      content: ''; position: absolute; width: 500px; height: 500px;
+      border-radius: 50%; filter: blur(100px); opacity: 0.15;
+      background: radial-gradient(circle, #8b5cf6, transparent 70%);
+      bottom: -150px; left: -100px;
+    }
+    .page-grid {
+      position: fixed; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .container {
+      max-width: 760px; margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative; z-index: 1;
+    }
+
+    /* 顶部导航 */
+    .top-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: #fff;
+    }
+    .nav-brand img {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-brand .name {
+      font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+    }
+    .nav-back {
+      font-size: 13px; color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      padding: 6px 16px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s;
+    }
+    .nav-back:hover {
+      color: #818cf8;
+      border-color: rgba(99,102,241,0.3);
+      background: rgba(99,102,241,0.08);
+    }
+
+    /* 标题区 */
+    .hero { margin-bottom: 36px; }
+    .hero .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 14px; border-radius: 20px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.2);
+      color: #818cf8; font-size: 11px; font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+    .hero .badge::before {
+      content: ''; width: 5px; height: 5px;
+      border-radius: 50%; background: #6366f1;
+    }
+    .hero h1 {
+      font-size: 34px; font-weight: 800; color: #fff;
+      letter-spacing: -0.8px; line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero .meta {
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    /* 内容卡片 */
+    .content {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 44px 48px;
+      backdrop-filter: blur(10px);
+    }
+    .content h2 {
+      font-size: 16px; font-weight: 700; color: #fff;
+      margin: 36px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .content h2::before {
+      content: '';
+      width: 3px; height: 16px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #6366f1, #8b5cf6);
+      flex-shrink: 0;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p {
+      margin-bottom: 14px; font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.9;
+    }
+    .content ul {
+      margin: 0 0 16px 24px;
+      font-size: 14px; color: rgba(255,255,255,0.6);
+    }
+    .content li {
+      margin-bottom: 8px;
+      padding-left: 4px;
+      line-height: 1.8;
+    }
+    .content li::marker {
+      color: #6366f1;
+    }
+    .content strong {
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    /* 底部 */
+    .page-footer {
+      text-align: center; margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px; color: rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 28px 24px; }
+      .hero h1 { font-size: 26px; }
+      .top-nav { flex-wrap: wrap; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="page-grid"></div>
+  <div class="container">
+    <nav class="top-nav">
+      <a class="nav-brand" href="/">
+        <img src="/logo.png" alt="ZhiYu-WAF" />
+        <span class="name">ZhiYu-WAF</span>
+      </a>
+      <a class="nav-back" href="/">← 返回登录</a>
+    </nav>
+
+    <div class="hero">
+      <span class="badge">法律文件</span>
+      <h1>隐私政策</h1>
+      <div class="meta">ZhiYu-WAF 社区版 · 最后更新：2026 年 5 月 16 日</div>
+    </div>
+
+    <div class="content">
+      <h2>一、引言</h2>
+      <p>小睿科技（以下简称"我们"）深知个人信息对您的重要性，并将严格遵守相关法律法规，采取相应的安全保护措施来保护您的个人信息。本隐私政策旨在向您说明我们如何收集、使用、存储和保护您的个人信息。</p>
+
+      <h2>二、我们收集的信息</h2>
+      <p>为提供安全防护服务，本产品可能收集以下信息：</p>
+      <ul>
+        <li><strong>账户信息：</strong>管理员用户名、密码（加密存储）</li>
+        <li><strong>访问日志：</strong>请求 IP 地址、请求路径、请求参数摘要、User-Agent、访问时间</li>
+        <li><strong>安全事件：</strong>被拦截请求的详细信息、攻击类型、威胁等级</li>
+        <li><strong>系统信息：</strong>服务器运行状态、资源使用情况</li>
+        <li><strong>AI 模型交互：</strong>发送至 AI 模型进行分析的请求内容（可配置关闭）</li>
+      </ul>
+
+      <h2>三、我们如何使用信息</h2>
+      <p>收集的信息仅用于以下目的：</p>
+      <ul>
+        <li>提供 Web 攻击检测与拦截服务</li>
+        <li>生成安全态势报告和攻击分析</li>
+        <li>优化规则引擎和 AI 检测模型</li>
+        <li>保障系统安全运行</li>
+        <li>履行法律法规要求</li>
+      </ul>
+
+      <h2>四、数据存储与安全</h2>
+      <p>我们采取以下措施保护您的数据安全：</p>
+      <ul>
+        <li>所有数据存储在您自行部署的服务器本地（SQLite 数据库），不上传至第三方</li>
+        <li>管理员密码使用 bcrypt 等安全哈希算法加密存储</li>
+        <li>管理面板通信支持 HTTPS 加密传输</li>
+        <li>JWT 令牌采用时效性认证机制</li>
+        <li>数据库文件建议设置适当的文件系统权限</li>
+      </ul>
+
+      <h2>五、AI 模型数据处理</h2>
+      <p>当您启用 AI 智能检测功能时：</p>
+      <ul>
+        <li>被规则引擎判定为可疑的请求内容将被发送至您配置的 AI 模型服务进行分析</li>
+        <li>我们支持 MiMo、Claude、OpenAI 及兼容接口等多种 AI 提供商</li>
+        <li>请求数据的传输目标取决于您的 AI 提供商配置，请参阅对应提供商的隐私政策</li>
+        <li>您可随时在设置中关闭 AI 检测功能以停止数据外传</li>
+      </ul>
+
+      <h2>六、数据保留与删除</h2>
+      <p>本产品的数据保留策略如下：</p>
+      <ul>
+        <li>攻击日志默认保留在本地数据库中，您可随时手动清除</li>
+        <li>统计数据基于近 24 小时数据聚合</li>
+        <li>卸载或删除本产品将清除所有本地数据</li>
+      </ul>
+
+      <h2>七、第三方服务</h2>
+      <p>本产品本身不集成任何第三方追踪或分析工具。但当您配置 AI 模型服务时，相关请求将发送至您指定的第三方服务端点。建议您同时阅读对应 AI 服务提供商的隐私政策。</p>
+
+      <h2>八、您的权利</h2>
+      <p>您享有以下权利：</p>
+      <ul>
+        <li>查阅和导出您的数据</li>
+        <li>修改或删除您的个人信息</li>
+        <li>关闭 AI 检测功能以限制数据外传</li>
+        <li>随时卸载产品并清除所有数据</li>
+      </ul>
+
+      <h2>九、隐私政策的更新</h2>
+      <p>我们可能会根据业务发展和法律法规的变化适时更新本隐私政策。更新后的政策将在本页面发布，并标注更新日期。建议您定期查阅本页面以了解最新政策。</p>
+
+      <h2>十、联系我们</h2>
+      <p>如您对本隐私政策有任何疑问、意见或建议，请通过产品内的反馈渠道与我们联系。我们将在收到您的反馈后尽快回复。</p>
+    </div>
+
+    <div class="page-footer">© 2026 小睿科技 版权所有 · ZhiYu-WAF 社区版</div>
+  </div>
+</body>
+</html>

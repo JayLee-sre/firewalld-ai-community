@@ -1,0 +1,153 @@
+rules:
+  - id: "SCAN-001"
+    name: "Scanner and Security Tool Fingerprint"
+    description: "Detects common automated scanners and attack tools by User-Agent or headers"
+    severity: "medium"
+    enabled: true
+    match_locations: ["headers", "user_agent"]
+    patterns:
+      - "(?i)(sqlmap|nikto|acunetix|nessus|nuclei|masscan|zgrab|dirbuster|gobuster|wpscan|whatweb|metasploit)"
+      - "(?i)(python-requests|libwww-perl|curl/[0-9]|wget/[0-9])"
+      - "(?i)(jaeles|ffuf|httpx|xray|awvs|appscan)"
+
+  - id: "DISCOVERY-001"
+    name: "Sensitive Endpoint Discovery"
+    description: "Detects probes for admin panels, backups, metadata and debug endpoints"
+    severity: "medium"
+    enabled: true
+    match_locations: ["path", "query"]
+    patterns:
+      - "(?i)/(admin|administrator|manage|manager|console|backend|wp-admin|phpmyadmin)(/|$)"
+      - "(?i)/(backup|bak|old|copy|dump|db|database)[^/]*\\.(zip|tar|gz|sql|7z|rar)$"
+      - "(?i)/(actuator|debug|server-status|metrics|prometheus|swagger|api-docs)(/|$)"
+      - "(?i)/(\\.git|\\.svn|\\.hg|\\.idea|\\.vscode)(/|$)"
+      - "(?i)/(composer\\.json|package-lock\\.json|yarn\\.lock|pom\\.xml|build\\.gradle)$"
+
+  - id: "WEBSHELL-001"
+    name: "WebShell Upload and Execution"
+    description: "Detects common webshell payloads and suspicious uploaded script extensions"
+    severity: "critical"
+    enabled: true
+    match_locations: ["path", "query", "body", "headers"]
+    patterns:
+      - "(?i)\\.(php|phtml|phar|jsp|jspx|asp|aspx|ashx|cer|asa)($|[?&])"
+      - "(?i)(eval|assert|system|shell_exec|passthru|proc_open|popen)\\s*\\("
+      - "(?i)(base64_decode|gzinflate|str_rot13|create_function)\\s*\\("
+      - "(?i)(cmd=|exec=|shell=|command=)(whoami|id|ipconfig|ifconfig|uname|cat|type)"
+      - "(?i)(multipart/form-data).*(filename=).*\\.(php|jsp|asp|aspx|phtml)"
+
+  - id: "SSRF-001"
+    name: "SSRF and Cloud Metadata Access"
+    description: "Detects SSRF attempts against internal networks and cloud metadata services"
+    severity: "high"
+    enabled: true
+    match_locations: ["url", "query"]
+    patterns:
+      - "(?i)(https?://)?(169\\.254\\.169\\.254|metadata\\.google\\.internal|100\\.100\\.100\\.200)"
+      - "(?i)(https?://)?(127\\.0\\.0\\.1|localhost|0\\.0\\.0\\.0|\\[::1\\])"
+      - "(?i)(https?://)?(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.(1[6-9]|2\\d|3[0-1])\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3})"
+      - "(?i)(file|gopher|dict|ftp|ldap)://"
+
+  - id: "SSTI-001"
+    name: "Server-Side Template Injection"
+    description: "Detects common template injection payloads"
+    severity: "high"
+    enabled: true
+    match_locations: ["query", "body", "headers"]
+    patterns:
+      - "(\\{\\{\\s*[^}]*\\}\\})"
+      - "(\\{%\\s*[^%]*%\\})"
+      - "(?i)(__class__|__mro__|__subclasses__|getClass\\s*\\(|class\\.forName)"
+      - "(?i)(freemarker\\.template|velocity|jinja2|twig|smarty)"
+
+  - id: "DESERIAL-001"
+    name: "Insecure Deserialization Payload"
+    description: "Detects common Java, PHP and .NET deserialization indicators"
+    severity: "critical"
+    enabled: true
+    match_locations: ["headers", "body", "query"]
+    patterns:
+      - "(?i)(rO0AB|aced0005|O:\\d+:\\\"|a:\\d+:\\{|__VIEWSTATE)"
+      - "(?i)(ysoserial|CommonsCollections|JdbcRowSetImpl|TemplatesImpl|ObjectDataProvider)"
+      - "(?i)(java\\.rmi|javax\\.naming|ldap://|rmi://)"
+
+  - id: "LOG4J-001"
+    name: "Log4Shell JNDI Injection"
+    description: "Detects Log4Shell style JNDI lookup payloads"
+    severity: "critical"
+    enabled: true
+    match_locations: ["url", "query", "body", "headers", "user_agent"]
+    patterns:
+      - "(?i)\\$\\{\\s*jndi\\s*:"
+      - "(?i)\\$\\{[^}]{0,80}(ldap|rmi|dns|iiop|nis|corba)://"
+      - "(?i)\\$\\{\\s*(lower|upper|env|sys|::-)"
+
+  - id: "LFI-002"
+    name: "Application Source and Secret File Read"
+    description: "Detects attempts to read source code, keys and runtime secrets"
+    severity: "high"
+    enabled: true
+    match_locations: ["path", "query", "body"]
+    patterns:
+      - "(?i)(/|%2f)(id_rsa|id_dsa|authorized_keys|known_hosts)$"
+      - "(?i)(/|%2f)(application\\.yml|application\\.properties|bootstrap\\.yml|settings\\.py|local_settings\\.py)$"
+      - "(?i)(/|%2f)(config\\.php|database\\.php|db\\.php|connection\\.php)$"
+      - "(?i)(/|%2f)(\\.env|\\.npmrc|\\.pypirc|credentials|secrets)(\\.|$|/)"
+
+  - id: "BOT-001"
+    name: "Credential Stuffing and Login Abuse"
+    description: "Detects automated login abuse patterns"
+    severity: "medium"
+    enabled: true
+    match_locations: ["path", "query", "body", "headers"]
+    patterns:
+      - "(?i)(password|passwd|pwd)=.{0,120}(&|;)(username|user|account|email)="
+      - "(?i)(username|user|account|email)=.{0,120}(&|;)(password|passwd|pwd)="
+      - "(?i)(X-Forwarded-For:|Client-IP:).*[, ]\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"
+      - "(?i)(hydra|medusa|patator|ncrack|brutus|sentry mba)"
+
+  - id: "RCE-001"
+    name: "Framework Remote Code Execution Probe"
+    description: "Detects common RCE exploit payloads against Java, PHP and framework endpoints"
+    severity: "critical"
+    enabled: true
+    match_locations: ["url", "query", "body", "headers"]
+    patterns:
+      - "(?i)(Runtime\\.getRuntime\\s*\\(|ProcessBuilder\\s*\\()"
+      - "(?i)(javax\\.script\\.ScriptEngineManager|T\\(java\\.lang\\.Runtime\\))"
+      - "(?i)(php://input|php://filter|expect://|data://text/plain)"
+      - "(?i)(/cgi-bin/[^?]*(bin/sh|bash)|/solr/.*/config|/struts2-showcase/)"
+      - "(?i)(class\\.module\\.classLoader|spring\\.cloud\\.function\\.routing-expression)"
+
+  - id: "API-001"
+    name: "GraphQL Introspection and API Schema Probe"
+    description: "Detects schema enumeration and GraphQL introspection probes"
+    severity: "medium"
+    enabled: true
+    match_locations: ["path", "query", "body"]
+    patterns:
+      - "(?i)(__schema|__type|IntrospectionQuery)"
+      - "(?i)(query\\s*\\{\\s*__schema|fragment\\s+FullType\\s+on\\s+__Type)"
+      - "(?i)(swagger-ui|openapi\\.json|api-docs|v2/api-docs|v3/api-docs)"
+
+  - id: "AUTH-001"
+    name: "Token and Auth Abuse Indicators"
+    description: "Detects attempts to leak, forge or inject common authentication tokens"
+    severity: "high"
+    enabled: true
+    match_locations: ["query", "body", "headers"]
+    patterns:
+      - "(?i)(jwt|token)=eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}"
+      - "(?i)(alg\\s*[:=]\\s*none|\"alg\"\\s*:\\s*\"none\")"
+      - "(?i)(Bearer\\s+null|Bearer\\s+undefined|Basic\\s+Og==)"
+
+  - id: "UPLOAD-001"
+    name: "Dangerous Upload Content Type"
+    description: "Detects upload attempts using executable filenames or suspicious MIME metadata"
+    severity: "high"
+    enabled: true
+    match_locations: ["headers", "body"]
+    patterns:
+      - "(?i)Content-Disposition:[^\\r\\n]*filename=\"?[^\"]*\\.(php|phtml|phar|jsp|jspx|asp|aspx|ashx|sh|bash|exe|dll)"
+      - "(?i)Content-Type:\\s*(application/x-php|application/x-msdownload|application/x-sh|text/x-shellscript)"
+      - "(?i)<%\\s*@\\s*page|<\\?php|<script\\s+runat\\s*=\\s*['\"]?server"

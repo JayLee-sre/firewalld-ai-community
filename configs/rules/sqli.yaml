@@ -1,0 +1,49 @@
+rules:
+  - id: "SQLI-001"
+    name: "SQL Injection - Union Select"
+    description: "Detects obvious SQL injection patterns (UNION SELECT, tautologies, DROP)"
+    severity: "critical"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)(UNION\\s+(ALL\\s+)?SELECT)"
+      - "(?i)(DROP\\s+(TABLE|DATABASE)\\s+)"
+      - "(?i)('\\s*OR\\s+1\\s*=\\s*1)"
+      - "(?i)(;\\s*DROP)"
+      - "(?i)(xp_cmdshell)"
+
+  - id: "SQLI-002"
+    name: "SQL Injection - Blind"
+    description: "Detects blind SQL injection patterns"
+    severity: "high"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)(SLEEP\\s*\\(\\s*\\d+\\s*\\))"
+      - "(?i)(BENCHMARK\\s*\\()"
+      - "(?i)(WAITFOR\\s+DELAY)"
+      - "(?i)(EXTRACTVALUE\\s*\\()"
+
+  - id: "SQLI-003"
+    name: "SQL Injection - Obfuscation and Stacked Queries"
+    description: "Detects comment-obfuscated SQL keywords and stacked query execution"
+    severity: "high"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)(UNION(?:/\\*.*?\\*/|\\s)+SELECT)"
+      - "(?i)(SELECT(?:/\\*.*?\\*/|\\s)+.*(?:/\\*.*?\\*/|\\s)+FROM)"
+      - "(?i)(;\\s*(UPDATE|INSERT|DELETE|DROP|ALTER|CREATE)\\s+)"
+      - "(?i)(information_schema|pg_catalog|sysobjects|sqlite_master)"
+      - "(?i)(LOAD_FILE\\s*\\(|INTO\\s+OUTFILE|xp_cmdshell)"
+
+  - id: "NOSQL-001"
+    name: "NoSQL Injection"
+    description: "Detects common MongoDB and JSON operator injection patterns"
+    severity: "high"
+    enabled: true
+    match_locations: ["query", "body"]
+    patterns:
+      - "(?i)(\\$ne|\\$gt|\\$gte|\\$lt|\\$lte|\\$regex|\\$where)\\s*[:=]"
+      - "(?i)(\"\\$where\"\\s*:|this\\.[A-Za-z0-9_]+\\s*==)"
+      - "(?i)(sleep\\s*\\(|function\\s*\\([^)]*\\)\\s*\\{)"

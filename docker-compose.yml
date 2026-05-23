@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  waf:
+    build: .
+    container_name: zhiyu-waf
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # WAF proxy
+      - "9090:9090"   # Dashboard
+    volumes:
+      - waf-data:/opt/zhiyu-waf/data
+      - ./configs:/opt/zhiyu-waf/configs:ro
+    environment:
+      - ZHIYU_WAF_JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - ZHIYU_WAF_OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ZHIYU_WAF_OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+    cap_add:
+      - NET_ADMIN     # Required for iptables
+    network_mode: host  # Required for iptables REDIRECT
+
+volumes:
+  waf-data:

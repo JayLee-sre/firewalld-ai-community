@@ -1,0 +1,27 @@
+rules:
+  - id: "CMDI-001"
+    name: "Command Injection"
+    description: "Detects OS command injection patterns"
+    severity: "critical"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)(;\\s*(ls|cat|id|whoami|pwd|uname|wget|curl|nc|ncat|bash|sh|cmd|powershell))"
+      - "(?i)(\\|\\s*(ls|cat|id|whoami|pwd|uname))"
+      - "(?i)(\\$\\(.*\\))"
+      - "(?i)(`[^`]*`)"
+      - "(?i)(\\|\\|\\s*(ls|cat))"
+      - "(?i)(&&\\s*(ls|cat|id))"
+
+  - id: "CMDI-002"
+    name: "Command Injection - Shell Bypass"
+    description: "Detects shell expansion, redirection and interpreter bypass payloads"
+    severity: "critical"
+    enabled: true
+    match_locations: ["url", "query", "body", "headers"]
+    patterns:
+      - "(?i)(bash\\s+-c|sh\\s+-c|cmd\\.exe\\s*/c|powershell\\s+(-enc|-encodedcommand|-nop))"
+      - "(?i)(/bin/(bash|sh|dash|zsh)|/usr/bin/(perl|python|ruby))"
+      - "(?i)(\\$\\{IFS\\}|\\$IFS|%0a\\s*(cat|id|whoami|curl|wget))"
+      - "(?i)((curl|wget)\\s+[^|;&]+\\|\\s*(sh|bash))"
+      - "(?i)(nc\\s+-e|ncat\\s+-e|mkfifo\\s+/tmp/)"

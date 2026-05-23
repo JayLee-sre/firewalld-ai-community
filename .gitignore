@@ -1,0 +1,13 @@
+bin/
+data/
+web/dist/
+web/node_modules/
+internal/dashboard/dist/
+*.db
+/zhiyu-waf
+
+# macOS
+.DS_Store
+
+# 截图（本地参考用，不提交）
+图片/

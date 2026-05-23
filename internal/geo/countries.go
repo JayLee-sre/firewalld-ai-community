@@ -1,0 +1,145 @@
+package geo
+
+// ChineseNameToCode maps Chinese country names (simplified + traditional variants)
+// to ISO 3166-1 alpha-2 country codes for reliable matching.
+var ChineseNameToCode = map[string]string{
+	// 常见国家 — 简体
+	"美国":        "US",
+	"日本":        "JP",
+	"韩国":        "KR",
+	"印度":        "IN",
+	"俄罗斯":      "RU",
+	"巴西":        "BR",
+	"德国":        "DE",
+	"英国":        "GB",
+	"法国":        "FR",
+	"加拿大":      "CA",
+	"澳大利亚":    "AU",
+	"荷兰":        "NL",
+	"新加坡":      "SG",
+	"印度尼西亚":  "ID",
+	"泰国":        "TH",
+	"越南":        "VN",
+	"菲律宾":      "PH",
+	"伊朗":        "IR",
+	"朝鲜":        "KP",
+	"土耳其":      "TR",
+	"意大利":      "IT",
+	"西班牙":      "ES",
+	"波兰":        "PL",
+	"乌克兰":      "UA",
+	"墨西哥":      "MX",
+	"阿根廷":      "AR",
+	"哥伦比亚":    "CO",
+	"南非":        "ZA",
+	"尼日利亚":    "NG",
+	"埃及":        "EG",
+	"沙特阿拉伯":  "SA",
+	"以色列":      "IL",
+	"马来西亚":    "MY",
+	"中国台湾":    "TW",
+	"中国香港":    "HK",
+	"中国":        "CN",
+	"中国澳门":    "MO",
+
+	// 常见国家 — 繁体变体（ip-api.com 返回）
+	"澳大利亞":    "AU",
+	"義大利":      "IT",
+	"烏克蘭":      "UA",
+	"哥倫比亞":    "CO",
+	"馬來西亞":    "MY",
+	"韓國":        "KR",
+	"葉門":        "YE",
+	"沙烏地阿拉伯": "SA",
+}
+
+// CodeToChinese maps ISO country codes to standard simplified Chinese names.
+var CodeToChinese = map[string]string{
+	"US": "美国",   "JP": "日本",   "KR": "韩国",   "IN": "印度",
+	"RU": "俄罗斯", "BR": "巴西",   "DE": "德国",   "GB": "英国",
+	"FR": "法国",   "CA": "加拿大", "AU": "澳大利亚", "NL": "荷兰",
+	"SG": "新加坡", "ID": "印度尼西亚", "TH": "泰国", "VN": "越南",
+	"PH": "菲律宾", "IR": "伊朗",   "KP": "朝鲜",   "TR": "土耳其",
+	"IT": "意大利", "ES": "西班牙", "PL": "波兰",   "UA": "乌克兰",
+	"MX": "墨西哥", "AR": "阿根廷", "CO": "哥伦比亚", "ZA": "南非",
+	"NG": "尼日利亚", "EG": "埃及", "SA": "沙特阿拉伯", "IL": "以色列",
+	"MY": "马来西亚", "TW": "中国台湾", "HK": "中国香港", "CN": "中国",
+	"MO": "中国澳门",
+}
+
+// EnglishNameToCode maps English country names from ip-api.com to ISO codes.
+var EnglishNameToCode = map[string]string{
+	"United States":  "US",
+	"Japan":          "JP",
+	"South Korea":    "KR",
+	"India":          "IN",
+	"Russia":         "RU",
+	"Brazil":         "BR",
+	"Germany":        "DE",
+	"United Kingdom": "GB",
+	"France":         "FR",
+	"Canada":         "CA",
+	"Australia":      "AU",
+	"Netherlands":    "NL",
+	"Singapore":      "SG",
+	"Indonesia":      "ID",
+	"Thailand":       "TH",
+	"Vietnam":        "VN",
+	"Philippines":    "PH",
+	"Iran":           "IR",
+	"North Korea":    "KP",
+	"Turkey":         "TR",
+	"Italy":          "IT",
+	"Spain":          "ES",
+	"Poland":         "PL",
+	"Ukraine":        "UA",
+	"Mexico":         "MX",
+	"Argentina":      "AR",
+	"Colombia":       "CO",
+	"South Africa":   "ZA",
+	"Nigeria":        "NG",
+	"Egypt":          "EG",
+	"Saudi Arabia":   "SA",
+	"Israel":         "IL",
+	"Malaysia":       "MY",
+	"Taiwan":         "TW",
+	"Hong Kong":      "HK",
+	"China":          "CN",
+	"Macao":          "MO",
+	"Czechia":        "CZ",
+	"Sweden":         "SE",
+	"Norway":         "NO",
+	"Denmark":        "DK",
+	"Finland":        "FI",
+	"Belgium":        "BE",
+	"Austria":        "AT",
+	"Switzerland":    "CH",
+	"Ireland":        "IE",
+	"Portugal":       "PT",
+	"Greece":         "GR",
+	"Hungary":        "HU",
+	"Romania":        "RO",
+	"Bulgaria":       "BG",
+	"Serbia":         "RS",
+	"Croatia":        "HR",
+	"Chile":          "CL",
+	"Peru":           "PE",
+	"Venezuela":      "VE",
+	"Ecuador":        "EC",
+	"Pakistan":       "PK",
+	"Bangladesh":     "BD",
+	"Sri Lanka":      "LK",
+	"Kazakhstan":     "KZ",
+	"New Zealand":    "NZ",
+}
+
+// ResolveCode resolves a country name (Chinese or English) to an ISO code.
+func ResolveCode(name string) string {
+	if code, ok := ChineseNameToCode[name]; ok {
+		return code
+	}
+	if code, ok := EnglishNameToCode[name]; ok {
+		return code
+	}
+	return ""
+}

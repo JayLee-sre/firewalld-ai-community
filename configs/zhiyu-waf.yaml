@@ -1,0 +1,53 @@
+proxy:
+  listen_addr: ":8080"
+  backend_addr: "127.0.0.1:80"
+  iptables_enable: true
+  iptables_port: 80
+  read_timeout: 30
+  write_timeout: 30
+  dynamic_protect: false  # enable HTML response mutation (anti-scraping)
+  # TLS termination: uncomment to enable HTTPS + HTTP/2
+  # tls_cert_file: "/opt/zhiyu-waf/certs/fullchain.pem"
+  # tls_key_file: "/opt/zhiyu-waf/certs/privkey.pem"
+
+dashboard:
+  listen_addr: ":9090"
+  jwt_secret: "ZhiYu-WAF-secret-change-me"
+  cors_origins:
+    - "*"
+
+license:
+  center_url: "https://sq.sreai.cloud:3333"
+  timeout: 8
+
+ai:
+  enabled: true
+  provider: "openai"
+  async_timeout: 5
+  cache_ttl: 300
+  max_requests_per_min: 60
+  fail_open: true
+  per_ip_rate: 10       # per-IP AI call limit per minute
+  per_ip_burst: 2       # per-IP burst limit
+  circuit_threshold: 5  # consecutive failures to trigger circuit breaker
+  circuit_reset: 30     # circuit breaker probe interval (seconds)
+  providers:
+    openai:
+      api_key: ""
+      model: ""
+      base_url: ""
+
+engine:
+  rules_dir: "./configs/rules"
+  rate_limit:
+    requests_per_minute: 60
+    burst_size: 10
+
+ssh:
+  enabled: true
+  log_path: ""
+  max_fails: 5
+  ban_minutes: 30
+
+storage:
+  path: "./data/zhiyu-waf.db"

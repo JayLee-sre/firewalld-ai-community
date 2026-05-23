@@ -1,0 +1,31 @@
+rules:
+  - id: "SENSITIVE-001"
+    name: "Sensitive File Access"
+    description: "Detects attempts to access sensitive files"
+    severity: "medium"
+    enabled: true
+    match_locations: ["path"]
+    patterns:
+      - "(?i)\\.env$"
+      - "(?i)\\.git/"
+      - "(?i)\\.svn/"
+      - "(?i)wp-config\\.php"
+      - "(?i)phpinfo\\.php"
+      - "(?i)\\.htaccess"
+      - "(?i)\\.htpasswd"
+      - "(?i)\\.DS_Store"
+      - "(?i)web\\.config"
+      - "(?i)config\\.yml$"
+
+  - id: "SENSITIVE-002"
+    name: "Repository and CI Secret Exposure"
+    description: "Detects attempts to access repository metadata, CI config and cloud credentials"
+    severity: "high"
+    enabled: true
+    match_locations: ["path", "query"]
+    patterns:
+      - "(?i)/(\\.git/config|\\.git/HEAD|\\.git/index|\\.git/logs/HEAD)$"
+      - "(?i)/(\\.github/workflows|\\.gitlab-ci\\.yml|Jenkinsfile|circle\\.yml|bitbucket-pipelines\\.yml)$"
+      - "(?i)/(docker-compose\\.yml|Dockerfile|kubernetes\\.yaml|kubeconfig)$"
+      - "(?i)/(aws/credentials|\\.aws/credentials|service-account\\.json|firebase-adminsdk.*\\.json)$"
+      - "(?i)/(id_rsa|id_ed25519|private_key\\.pem|server\\.key|tls\\.key)$"

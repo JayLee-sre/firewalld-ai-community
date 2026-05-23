@@ -1,0 +1,39 @@
+rules:
+  - id: "XSS-001"
+    name: "XSS - Script Injection"
+    description: "Detects script injection patterns"
+    severity: "high"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)<script[^>]*>"
+      - "(?i)javascript\\s*:"
+      - "(?i)on(load|error|click|mouseover|focus|blur)\\s*="
+      - "(?i)<iframe[^>]*>"
+      - "(?i)<object[^>]*>"
+      - "(?i)<embed[^>]*>"
+
+  - id: "XSS-002"
+    name: "XSS - Event Handler"
+    description: "Detects HTML event handler injection"
+    severity: "medium"
+    enabled: true
+    match_locations: ["query", "body"]
+    patterns:
+      - "(?i)on\\w+\\s*=\\s*['\"]?[^'\"]*\\("
+      - "(?i)eval\\s*\\("
+      - "(?i)document\\.cookie"
+      - "(?i)document\\.write"
+
+  - id: "XSS-003"
+    name: "XSS - SVG and HTML5 Payload"
+    description: "Detects SVG, srcdoc and HTML5-based script execution payloads"
+    severity: "high"
+    enabled: true
+    match_locations: ["url", "query", "body"]
+    patterns:
+      - "(?i)<svg[^>]*(onload|onerror|animate|script)"
+      - "(?i)<math[^>]*>.*<mtext[^>]*>"
+      - "(?i)srcdoc\\s*=\\s*['\"]?\\s*<"
+      - "(?i)<img[^>]+src\\s*=\\s*['\"]?x['\"]?\\s+onerror\\s*="
+      - "(?i)String\\.fromCharCode\\s*\\("

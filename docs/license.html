@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智域 WAF · 专业版授权</title>
+<style>
+  :root {
+    --pri: #4f46e5;
+    --pri-light: #818cf8;
+    --pri-50: #eef2ff;
+    --pri-100: #e0e7ff;
+    --accent: #f59e0b;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --red: #dc2626;
+    --pink: #ec4899;
+    --cyan: #06b6d4;
+    --orange: #f97316;
+    --bg: #f8fafc;
+    --bg-white: #ffffff;
+    --bg-subtle: #f1f5f9;
+    --text: #1e293b;
+    --text-mid: #475569;
+    --text-light: #94a3b8;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+    --shadow-lg: 0 10px 25px -5px rgba(0,0,0,.08), 0 8px 10px -6px rgba(0,0,0,.04);
+    --shadow-xl: 0 20px 50px -12px rgba(0,0,0,.12);
+    --radius: 14px;
+    --radius-lg: 20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+  svg{display:inline-block;vertical-align:middle}
+
+  /* NAV */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+  .nav.scrolled{box-shadow:var(--shadow-md)}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px}
+  .nav-logo{font-weight:800;font-size:1.15rem;color:var(--pri);display:flex;align-items:center;gap:8px;text-decoration:none}
+  .nav-logo svg{width:28px;height:28px}
+  .nav-links{display:flex;gap:8px}
+  .nav-links a{padding:8px 16px;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--text-mid);text-decoration:none;transition:all .2s}
+  .nav-links a:hover{background:var(--pri-50);color:var(--pri)}
+  .nav-cta{padding:8px 20px!important;background:var(--pri)!important;color:#fff!important;border-radius:8px!important;font-weight:600!important}
+  .nav-cta:hover{background:var(--pri-light)!important}
+
+  /* HERO */
+  .hero{text-align:center;padding:140px 24px 100px;position:relative;overflow:hidden;background:linear-gradient(160deg,#eef2ff 0%,#fff 40%,#fef3c7 100%)}
+  .hero::before{content:'';position:absolute;top:-120px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.12),transparent 70%);border-radius:50%;pointer-events:none}
+  .hero::after{content:'';position:absolute;bottom:-100px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,.1),transparent 70%);border-radius:50%;pointer-events:none}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--pri-50);border:1px solid var(--pri-100);color:var(--pri);padding:6px 18px;border-radius:40px;font-size:.82rem;font-weight:600;margin-bottom:24px;letter-spacing:.3px}
+  .hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .hero h1{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:900;color:var(--text);line-height:1.15;margin-bottom:20px;position:relative}
+  .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--pri),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:1.2rem;color:var(--text-mid);max-width:640px;margin:0 auto 36px;position:relative}
+  .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:600;text-decoration:none;transition:all .25s;cursor:pointer;border:none}
+  .btn svg{width:18px;height:18px}
+  .btn-pri{background:var(--pri);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+  .btn-pri:hover{background:var(--pri-light);box-shadow:0 6px 20px rgba(79,70,229,.4);transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--text);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+  .btn-ghost:hover{border-color:var(--pri-light);color:var(--pri);transform:translateY(-2px)}
+  .btn-lg{padding:16px 40px;font-size:1.05rem;border-radius:14px}
+
+  /* STATS */
+  .stats{max-width:960px;margin:-48px auto 0;position:relative;z-index:2;padding:0 24px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--bg-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;border:1px solid var(--border)}
+  .stat{text-align:center;padding:28px 16px;border-right:1px solid var(--border)}
+  .stat:last-child{border-right:none}
+  .stat svg{width:28px;height:28px;margin-bottom:8px}
+  .stat-num{font-size:2rem;font-weight:800;color:var(--pri);margin-bottom:4px}
+  .stat-label{font-size:.82rem;color:var(--text-light);font-weight:500}
+
+  /* SECTIONS */
+  section{max-width:1200px;margin:0 auto;padding:80px 24px}
+  .sec-head{text-align:center;margin-bottom:56px}
+  .sec-tag{display:inline-flex;align-items:center;gap:6px;background:var(--pri-50);color:var(--pri);font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:14px}
+  .sec-tag svg{width:14px;height:14px}
+  .sec-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--text);margin-bottom:12px}
+  .sec-desc{font-size:1.05rem;color:var(--text-mid);max-width:560px;margin:0 auto}
+
+  /* FEATURE CARDS */
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .feat{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius);padding:36px 24px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+  .feat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pri),var(--pri-light));opacity:0;transition:opacity .3s}
+  .feat:hover{transform:translateY(-6px);box-shadow:var(--shadow-xl);border-color:var(--pri-100)}
+  .feat:hover::before{opacity:1}
+  .feat-icon{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+  .feat-icon svg{width:30px;height:30px}
+  .feat-icon.purple{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+  .feat-icon.purple svg{color:#7c3aed}
+  .feat-icon.blue{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}
+  .feat-icon.blue svg{color:#2563eb}
+  .feat-icon.green{background:linear-gradient(135deg,#d1fae5,#a7f3d0)}
+  .feat-icon.green svg{color:#059669}
+  .feat-icon.orange{background:linear-gradient(135deg,#ffedd5,#fed7aa)}
+  .feat-icon.orange svg{color:#ea580c}
+  .feat-icon.pink{background:linear-gradient(135deg,#fce7f3,#fbcfe8)}
+  .feat-icon.pink svg{color:#db2777}
+  .feat-icon.cyan{background:linear-gradient(135deg,#cffafe,#a5f3fc)}
+  .feat-icon.cyan svg{color:#0891b2}
+  .feat h4{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:10px}
+  .feat p{font-size:.88rem;color:var(--text-mid);line-height:1.6}
+
+  /* HOW IT WORKS */
+  .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
+  .how-grid::before{content:'';position:absolute;top:44px;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--pri-100) 0,var(--pri-100) 8px,transparent 8px,transparent 16px)}
+  .how-step{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius);padding:32px 20px 28px;text-align:center;position:relative;z-index:1;transition:all .3s}
+  .how-step:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px)}
+  .how-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+  .how-icon svg{width:22px;height:22px;color:#fff}
+  .how-icon.n1{background:linear-gradient(135deg,#6366f1,#818cf8)}
+  .how-icon.n2{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+  .how-icon.n3{background:linear-gradient(135deg,#06b6d4,#22d3ee)}
+  .how-icon.n4{background:linear-gradient(135deg,#059669,#34d399)}
+  .how-step h4{font-size:1rem;font-weight:700;margin-bottom:8px}
+  .how-step p{font-size:.85rem;color:var(--text-mid)}
+
+  /* TABLE */
+  .table-wrap{background:var(--bg-white);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;min-width:680px}
+  thead th{padding:18px 16px;font-size:.88rem;font-weight:700;letter-spacing:.5px;border-bottom:2px solid var(--border);background:var(--bg-subtle);position:sticky;top:0}
+  thead th:first-child{text-align:left;width:46%}
+  thead th:nth-child(2){color:var(--text-mid)}
+  thead th:nth-child(3){color:var(--pri)}
+  tbody td{padding:14px 16px;border-bottom:1px solid var(--border);text-align:center;font-size:.92rem}
+  tbody td:first-child{text-align:left;font-weight:500;color:var(--text)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--pri-50)}
+  .cat-row td{background:var(--pri-50)!important;font-weight:700;font-size:.8rem;letter-spacing:.8px;text-transform:uppercase;color:var(--pri);padding:10px 16px}
+  .yes svg{width:18px;height:18px;color:var(--green)}
+  .no svg{width:18px;height:18px;color:#cbd5e1}
+  .pro-tag{display:inline-block;background:linear-gradient(135deg,var(--accent),#f97316);color:#fff;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;letter-spacing:.3px}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-items:start}
+  .price-card{background:var(--bg-white);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:40px 32px;display:flex;flex-direction:column;transition:all .3s;position:relative}
+  .price-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-xl)}
+  .price-card.featured{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri),var(--shadow-lg);transform:scale(1.03)}
+  .price-card.featured:hover{transform:scale(1.03) translateY(-6px)}
+  .price-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--pri),var(--pink));color:#fff;font-size:.72rem;font-weight:700;padding:5px 22px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;display:flex;align-items:center;gap:5px}
+  .price-badge svg{width:14px;height:14px}
+  .price-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+  .price-icon svg{width:26px;height:26px}
+  .price-icon.community{background:var(--bg-subtle)}
+  .price-icon.community svg{color:var(--text-mid)}
+  .price-icon.pro{background:var(--pri-50)}
+  .price-icon.pro svg{color:var(--pri)}
+  .price-icon.enterprise{background:#fef3c7}
+  .price-icon.enterprise svg{color:#d97706}
+  .price-card h3{font-size:1.35rem;font-weight:800;color:var(--text);margin-bottom:6px}
+  .price-card .desc{color:var(--text-light);font-size:.9rem;margin-bottom:20px}
+  .price-amount{font-size:2.8rem;font-weight:900;color:var(--text);margin-bottom:2px;line-height:1}
+  .price-amount .currency{font-size:1.4rem;font-weight:700;vertical-align:top;margin-right:2px}
+  .price-amount .period{font-size:.95rem;font-weight:400;color:var(--text-light);margin-left:4px}
+  .price-note{color:var(--text-light);font-size:.82rem;margin-bottom:28px}
+  .price-divider{height:1px;background:var(--border);margin-bottom:24px}
+  .price-features{list-style:none;flex:1;margin-bottom:32px}
+  .price-features li{padding:7px 0;font-size:.9rem;color:var(--text-mid);display:flex;align-items:center;gap:10px}
+  .price-features li svg{width:18px;height:18px;flex-shrink:0}
+  .price-features li.on svg{color:var(--green)}
+  .price-features li.off{color:#cbd5e1}
+  .price-features li.off svg{color:#e2e8f0}
+
+  /* GUARANTEE */
+  .guarantee{background:linear-gradient(135deg,var(--green-light),#ecfdf5);border:1px solid #a7f3d0;border-radius:var(--radius-lg);padding:40px 32px;text-align:center;margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .guarantee svg{width:36px;height:36px;color:var(--green);margin-bottom:4px}
+  .guarantee h3{color:var(--green);font-size:1.2rem;margin-bottom:8px}
+  .guarantee p{color:var(--text-mid);font-size:.95rem;max-width:500px;margin:0 auto}
+
+  /* FAQ */
+  .faq-list{max-width:800px;margin:0 auto}
+  .faq-item{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:all .3s}
+  .faq-item:hover{box-shadow:var(--shadow-md)}
+  .faq-q{padding:20px 24px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px;font-size:.98rem;user-select:none}
+  .faq-q .q-icon{width:32px;height:32px;border-radius:8px;background:var(--pri-50);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .faq-q .q-icon svg{width:16px;height:16px;color:var(--pri)}
+  .faq-q .q-text{flex:1}
+  .faq-q .q-arrow{width:24px;height:24px;border-radius:50%;background:var(--pri-50);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s}
+  .faq-q .q-arrow svg{width:14px;height:14px;color:var(--pri)}
+  .faq-item.open .faq-q .q-arrow{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .faq-item.open .faq-a{max-height:400px}
+  .faq-a-inner{padding:0 24px 20px 70px;color:var(--text-mid);font-size:.92rem;line-height:1.8}
+
+  /* TESTIMONIALS */
+  .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .test-card{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;transition:all .3s}
+  .test-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px)}
+  .test-quote{margin-bottom:16px}
+  .test-quote svg{width:28px;height:28px;color:var(--pri-100)}
+  .test-stars{color:var(--accent);font-size:.95rem;margin-bottom:14px;letter-spacing:2px}
+  .test-text{font-size:.92rem;color:var(--text-mid);line-height:1.7;margin-bottom:20px}
+  .test-author{display:flex;align-items:center;gap:12px}
+  .test-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.9rem}
+  .test-name{font-weight:600;font-size:.9rem;color:var(--text)}
+  .test-role{font-size:.8rem;color:var(--text-light)}
+
+  /* CONTACT */
+  .contact-section{background:linear-gradient(135deg,#eef2ff,#fdf4ff);border-radius:var(--radius-lg);padding:60px 32px;text-align:center}
+  .contact-section h3{font-size:1.6rem;font-weight:800;margin-bottom:12px}
+  .contact-section>p{color:var(--text-mid);margin-bottom:28px;font-size:1rem;max-width:500px;margin-left:auto;margin-right:auto}
+  .contact-cards{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .contact-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 28px;text-decoration:none;color:var(--text);transition:all .25s;box-shadow:var(--shadow)}
+  .contact-card:hover{border-color:var(--pri-light);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+  .contact-card .ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+  .contact-card .ico svg{width:20px;height:20px}
+  .contact-card .ico.email{background:var(--pri-50)}
+  .contact-card .ico.email svg{color:var(--pri)}
+  .contact-card .ico.github{background:var(--bg-subtle)}
+  .contact-card .ico.github svg{color:var(--text-mid)}
+  .contact-card .label{font-size:.8rem;color:var(--text-light);text-align:left}
+  .contact-card .value{font-size:.95rem;font-weight:600;color:var(--text);text-align:left}
+
+  /* FOOTER */
+  footer{text-align:center;padding:48px 24px;color:var(--text-light);font-size:.85rem;border-top:1px solid var(--border);max-width:1200px;margin:0 auto}
+  footer a{color:var(--pri);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px}
+  .footer-links a{display:flex;align-items:center;gap:5px}
+  .footer-links a svg{width:14px;height:14px}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .feat-grid{grid-template-columns:repeat(2,1fr)}
+    .pricing-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+    .price-card.featured{transform:none}
+    .price-card.featured:hover{transform:translateY(-6px)}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:none}
+    .how-grid{grid-template-columns:repeat(2,1fr)}
+    .how-grid::before{display:none}
+    .test-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+  @media(max-width:600px){
+    .feat-grid{grid-template-columns:1fr}
+    .stats-grid{grid-template-columns:1fr}
+    .stat{border-right:none;border-bottom:1px solid var(--border)}
+    .stat:last-child{border-bottom:none}
+    .how-grid{grid-template-columns:1fr}
+    section{padding:56px 16px}
+    .hero{padding:110px 16px 70px}
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG defs -->
+<svg style="display:none">
+  <defs>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6M10 17v4M14 17v4"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
+    <symbol id="i-click" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9l5 12 1.8-5.2L21 14 9 9z"/><path d="M7.2 7.2l3.6 3.6"/><path d="M16.5 2.5l-3 3"/><path d="M2 12h3"/><path d="M12 2v3"/></symbol>
+    <symbol id="i-unlock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol>
+    <symbol id="i-speed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="https://img.cdn1.vip/i/6a0ee596d0f81_1779361174.webp" alt="智域WAF" style="width:32px;height:32px;border-radius:8px">
+      智域 WAF
+    </a>
+    <div class="nav-links">
+      <a href="#features">
+        <svg style="width:14px;height:14px"><use href="#i-shield"/></svg> 功能特性
+      </a>
+      <a href="#compare">
+        <svg style="width:14px;height:14px"><use href="#i-chart"/></svg> 版本对比
+      </a>
+      <a href="#pricing">
+        <svg style="width:14px;height:14px"><use href="#i-award"/></svg> 价格方案
+      </a>
+      <a href="#faq">
+        <svg style="width:14px;height:14px"><use href="#i-help"/></svg> 常见问题
+      </a>
+      <a href="mailto:lijie.xiaorui@qq.com?subject=智域WAF专业版授权咨询" class="nav-cta">
+        <svg style="width:14px;height:14px"><use href="#i-mail"/></svg> 联系购买
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge"><span class="dot"></span> <svg style="width:14px;height:14px"><use href="#i-rocket"/></svg> 2026 年全新发布</div>
+  <h1>让 Web 安全<br>触手可<em>及</em></h1>
+  <p class="hero-sub">智域 WAF 专业版 — AI 驱动的智能 Web 应用防火墙，<br>一个命令守护你的全部业务</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn btn-pri btn-lg">
+      <svg><use href="#i-award"/></svg> 查看授权方案
+    </a>
+    <a href="https://github.com/JayLee-sre/ZHIYU-WAF" class="btn btn-ghost btn-lg">
+      <svg><use href="#i-github"/></svg> GitHub 免费下载
+    </a>
+    <a href="https://gitee.com/jack989800/ZhiYu-WAF" class="btn btn-ghost btn-lg">
+      <svg><use href="#i-github"/></svg> Gitee 免费下载
+    </a>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <svg style="color:var(--pri)"><use href="#i-shield"/></svg>
+      <div class="stat-num">6+</div>
+      <div class="stat-label">检测引擎模块</div>
+    </div>
+    <div class="stat">
+      <svg style="color:var(--cyan)"><use href="#i-zap"/></svg>
+      <div class="stat-num">&lt;2ms</div>
+      <div class="stat-label">平均检测延迟</div>
+    </div>
+    <div class="stat">
+      <svg style="color:var(--green)"><use href="#i-check"/></svg>
+      <div class="stat-num">247</div>
+      <div class="stat-label">内置防护规则</div>
+    </div>
+    <div class="stat">
+      <svg style="color:var(--accent)"><use href="#i-star"/></svg>
+      <div class="stat-num">99.9%</div>
+      <div class="stat-label">可用性保障</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-star"/></svg> 专业版特性</span>
+    <h2 class="sec-title">不只是防火墙，是智能安全中枢</h2>
+    <p class="sec-desc">六大核心能力，构建从网络层到应用层的纵深防御体系</p>
+  </div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon purple"><svg><use href="#i-globe"/></svg></div>
+      <h4>智能地理封锁</h4>
+      <p>基于 ISO 3166-1 国家代码精准识别，支持中英文国名，一键封锁高风险地区</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon blue"><svg><use href="#i-server"/></svg></div>
+      <h4>威胁情报同步</h4>
+      <p>自动对接 AbuseIPDB 等多源情报，实时更新恶意 IP 黑名单</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon green"><svg><use href="#i-brain"/></svg></div>
+      <h4>AI 规则生成</h4>
+      <p>AI 分析攻击样本自动生成防护规则，无需手动编写正则</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon orange"><svg><use href="#i-target"/></svg></div>
+      <h4>威胁画像分析</h4>
+      <p>深度分析攻击者行为模式，生成威胁画像报告</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon pink"><svg><use href="#i-layout"/></svg></div>
+      <h4>多站点管理</h4>
+      <p>一个控制台管理多个站点的安全策略，独立配置统一监控</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon cyan"><svg><use href="#i-users"/></svg></div>
+      <h4>多用户权限</h4>
+      <p>RBAC 权限模型，管理员 / 运维 / 只读，审计全程可追溯</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-zap"/></svg> 授权流程</span>
+    <h2 class="sec-title">四步激活，即刻升级</h2>
+    <p class="sec-desc">无需停机，无需重装，输入授权码立即解锁全部专业功能</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-icon n1"><svg><use href="#i-mail"/></svg></div>
+      <h4>咨询购买</h4>
+      <p>发送邮件说明需求，我们会在 24 小时内回复报价</p>
+    </div>
+    <div class="how-step">
+      <div class="how-icon n2"><svg><use href="#i-key"/></svg></div>
+      <h4>获取授权码</h4>
+      <p>付款后邮箱收到专属 License Key，含激活说明文档</p>
+    </div>
+    <div class="how-step">
+      <div class="how-icon n3"><svg><use href="#i-click"/></svg></div>
+      <h4>一键激活</h4>
+      <p>控制台「设置 → 授权」粘贴 Key 并点击激活</p>
+    </div>
+    <div class="how-step">
+      <div class="how-icon n4"><svg><use href="#i-unlock"/></svg></div>
+      <h4>功能解锁</h4>
+      <p>专业版功能立即生效，无需重启服务，数据零迁移</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-chart"/></svg> 版本对比</span>
+    <h2 class="sec-title">社区版已经很强，专业版更强</h2>
+    <p class="sec-desc">所有功能一目了然，按需升级</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>功能</th><th>社区版（免费）</th><th>专业版</th></tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="3"><svg style="width:14px;height:14px"><use href="#i-shield"/></svg> 检测能力</td></tr>
+        <tr><td>SQL 注入检测</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>XSS 跨站脚本检测</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>命令注入检测</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>路径穿越检测</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>敏感数据泄露检测</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>企业级漏洞规则（Log4j / Spring4Shell）</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>自定义正则规则 + 热加载</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>地理封锁（按国家/地区）<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>威胁情报多源同步<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+
+        <tr class="cat-row"><td colspan="3"><svg style="width:14px;height:14px"><use href="#i-brain"/></svg> AI 智能检测</td></tr>
+        <tr><td>AI 请求语义分析</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>AI 供应商切换（OpenAI / Claude）</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>AI 用量统计与熔断保护</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>AI 建议规则自动生成<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>威胁画像分析<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+
+        <tr class="cat-row"><td colspan="3"><svg style="width:14px;height:14px"><use href="#i-shield"/></svg> 防护能力</td></tr>
+        <tr><td>全局 + 单 IP 速率限制</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>SSH 暴力破解防护</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>IP 黑白名单管理</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>ACME 自动 SSL 证书（Let's Encrypt）</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>iptables 透明代理</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+
+        <tr class="cat-row"><td colspan="3"><svg style="width:14px;height:14px"><use href="#i-layout"/></svg> 管理能力</td></tr>
+        <tr><td>Vue 3 实时仪表盘</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>WebSocket 日志实时推送</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>日志导出（CSV）</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>备份与恢复</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>多用户 + RBAC 权限控制<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>多站点管理<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>操作审计日志<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+
+        <tr class="cat-row"><td colspan="3"><svg style="width:14px;height:14px"><use href="#i-msg"/></svg> 技术支持</td></tr>
+        <tr><td>社区支持（GitHub Issues）</td><td class="yes"><svg><use href="#i-check"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>优先邮件技术支持<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+        <tr><td>远程部署协助<span class="pro-tag">PRO</span></td><td class="no"><svg><use href="#i-x"/></svg></td><td class="yes"><svg><use href="#i-check"/></svg></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-award"/></svg> 价格方案</span>
+    <h2 class="sec-title">选择适合你的方案</h2>
+    <p class="sec-desc">社区版永久免费，专业版灵活授权</p>
+  </div>
+  <div class="pricing-grid">
+    <!-- Community -->
+    <div class="price-card">
+      <div class="price-icon community"><svg><use href="#i-github"/></svg></div>
+      <h3>社区版</h3>
+      <p class="desc">个人开发者 / 小型项目</p>
+      <div class="price-amount">免费</div>
+      <div class="price-note">AGPL-3.0 开源协议 · 永久免费</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="on"><svg><use href="#i-check"/></svg>完整规则引擎（6 大检测模块）</li>
+        <li class="on"><svg><use href="#i-check"/></svg>全局 + 单 IP 速率限制</li>
+        <li class="on"><svg><use href="#i-check"/></svg>SSH 暴力破解防护</li>
+        <li class="on"><svg><use href="#i-check"/></svg>基础 AI 请求分析</li>
+        <li class="on"><svg><use href="#i-check"/></svg>Vue 3 实时仪表盘</li>
+        <li class="on"><svg><use href="#i-check"/></svg>ACME 自动 SSL 证书</li>
+        <li class="on"><svg><use href="#i-check"/></svg>备份与恢复</li>
+        <li class="off"><svg><use href="#i-x"/></svg>地理封锁</li>
+        <li class="off"><svg><use href="#i-x"/></svg>威胁情报同步</li>
+        <li class="off"><svg><use href="#i-x"/></svg>AI 高级分析</li>
+        <li class="off"><svg><use href="#i-x"/></svg>多站点管理</li>
+        <li class="off"><svg><use href="#i-x"/></svg>优先技术支持</li>
+      </ul>
+      <a href="https://github.com/JayLee-sre/ZHIYU-WAF" class="btn btn-ghost" style="width:100%">
+        <svg><use href="#i-download"/></svg> GitHub 下载
+      </a>
+      <a href="https://gitee.com/jack989800/ZhiYu-WAF" class="btn btn-ghost" style="width:100%;margin-top:8px">
+        <svg><use href="#i-download"/></svg> Gitee 下载
+      </a>
+    </div>
+
+    <!-- Pro -->
+    <div class="price-card featured">
+      <span class="price-badge"><svg><use href="#i-star"/></svg> 最受欢迎</span>
+      <div class="price-icon pro"><svg><use href="#i-shield-check"/></svg></div>
+      <h3>专业版</h3>
+      <p class="desc">企业用户 / 安全高要求团队</p>
+      <div class="price-amount"><span class="currency">¥</span>988<span class="period">/年</span></div>
+      <div class="price-note">单台服务器授权 · 含一年功能更新</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="on"><svg><use href="#i-check"/></svg>社区版全部功能</li>
+        <li class="on"><svg><use href="#i-check"/></svg>智能地理封锁</li>
+        <li class="on"><svg><use href="#i-check"/></svg>威胁情报自动同步</li>
+        <li class="on"><svg><use href="#i-check"/></svg>AI 建议规则自动生成</li>
+        <li class="on"><svg><use href="#i-check"/></svg>威胁画像分析报告</li>
+        <li class="on"><svg><use href="#i-check"/></svg>多站点集中管理</li>
+        <li class="on"><svg><use href="#i-check"/></svg>多用户 + RBAC 权限</li>
+        <li class="on"><svg><use href="#i-check"/></svg>操作审计日志</li>
+        <li class="on"><svg><use href="#i-check"/></svg>优先邮件技术支持</li>
+        <li class="on"><svg><use href="#i-check"/></svg>远程部署协助</li>
+      </ul>
+      <a href="mailto:lijie.xiaorui@qq.com?subject=智域WAF专业版授权咨询" class="btn btn-pri" style="width:100%">
+        <svg><use href="#i-mail"/></svg> 联系购买
+      </a>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="price-card">
+      <div class="price-icon enterprise"><svg><use href="#i-tool"/></svg></div>
+      <h3>企业定制</h3>
+      <p class="desc">多机房 / 特殊需求</p>
+      <div class="price-amount">按需报价</div>
+      <div class="price-note">不限服务器数量 · 功能可定制</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="on"><svg><use href="#i-check"/></svg>专业版全部功能</li>
+        <li class="on"><svg><use href="#i-check"/></svg>不限服务器数量授权</li>
+        <li class="on"><svg><use href="#i-check"/></svg>MySQL 存储后端支持</li>
+        <li class="on"><svg><use href="#i-check"/></svg>自定义规则引擎扩展</li>
+        <li class="on"><svg><use href="#i-check"/></svg>私有化部署方案</li>
+        <li class="on"><svg><use href="#i-check"/></svg>专属技术经理</li>
+        <li class="on"><svg><use href="#i-check"/></svg>SLA 可用性保障</li>
+        <li class="on"><svg><use href="#i-check"/></svg>源码技术培训</li>
+      </ul>
+      <a href="mailto:lijie.xiaorui@qq.com?subject=智域WAF企业定制咨询" class="btn btn-ghost" style="width:100%">
+        <svg><use href="#i-msg"/></svg> 联系咨询
+      </a>
+    </div>
+  </div>
+
+  <div class="guarantee">
+    <svg><use href="#i-shield-check"/></svg>
+    <h3>7 天无忧退款保障</h3>
+    <p>专业版购买后 7 天内，如不满意可全额退款，无需任何理由。我们对产品充满信心。</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-msg"/></svg> 用户评价</span>
+    <h2 class="sec-title">来自真实用户的反馈</h2>
+  </div>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-quote"><svg><use href="#i-msg"/></svg></div>
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"部署后第二天就拦截了一波 SQL 注入攻击，地理封锁功能帮我们挡掉了 90% 的海外恶意扫描。物超所值。"</p>
+      <div class="test-author">
+        <div class="test-avatar" style="background:linear-gradient(135deg,#6366f1,#818cf8)">王</div>
+        <div><div class="test-name">王工程师</div><div class="test-role">某电商平台运维负责人</div></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote"><svg><use href="#i-msg"/></svg></div>
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"AI 检测准确率很高，误报率比之前用的商业 WAF 低很多。规则热加载不停机这点太方便了。"</p>
+      <div class="test-author">
+        <div class="test-avatar" style="background:linear-gradient(135deg,#059669,#34d399)">李</div>
+        <div><div class="test-name">李架构师</div><div class="test-role">SaaS 公司技术总监</div></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote"><svg><use href="#i-msg"/></svg></div>
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"开源版就很强了，升级专业版主要看中多站点管理和威胁情报。邮件回复很及时，态度也很好。"</p>
+      <div class="test-author">
+        <div class="test-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316)">张</div>
+        <div><div class="test-name">张站长</div><div class="test-role">独立开发者</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="sec-head">
+    <span class="sec-tag"><svg><use href="#i-help"/></svg> 常见问题</span>
+    <h2 class="sec-title">您可能关心的问题</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">授权是按服务器还是按项目计算？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">专业版授权按单台服务器计算。每台运行智域 WAF 的服务器需要独立的授权码。如需多台服务器部署，可选择企业定制方案获得批量折扣和不限数量授权。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">授权到期后会怎样？数据会丢失吗？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">授权到期后，专业版功能将进入 7 天宽限期，宽限期内功能仍可正常使用。宽限期结束后自动降级为社区版，您的所有配置、规则和日志数据完全保留，规则引擎等基础功能继续正常运行，不会丢失任何数据。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">如何更换服务器？迁移复杂吗？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">授权码绑定机器指纹。如需迁移，在旧服务器的控制台「设置 → 授权」页面解除绑定，然后在新服务器上重新激活即可。如果旧服务器已无法访问，联系技术支持我们会协助处理，整个过程不超过 5 分钟。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">开源版和专业版的代码有区别吗？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">社区版代码完全开源，功能没有任何阉割。专业版通过在线授权中心验证 License Key 解锁高级功能模块，核心代码架构完全一致。我们不会通过闭源来制造功能差异，所有检测引擎和规则在社区版中均可使用。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">支持哪些付款方式？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">支持支付宝、微信支付、银行转账。企业客户可对公转账并开具增值税普通发票或专用发票。具体付款方式将在购买邮件中详细说明。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">离线/内网环境能否使用专业版？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">支持。专业版支持离线授权模式：首次激活需要联网验证，验证通过后授权 token 有效期为 90 天，期间完全无需联网。到期前系统会自动提示续期验证，只需短暂联网即可续期。</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <span class="q-icon"><svg><use href="#i-help"/></svg></span>
+        <span class="q-text">购买后可以升级方案吗？</span>
+        <span class="q-arrow"><svg><use href="#i-down"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">可以。从社区版升级专业版，或从专业版升级企业定制，均可随时操作。升级时按照剩余授权期限折算差价，不会重复收费。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section>
+  <div class="contact-section">
+    <svg style="width:48px;height:48px;color:var(--pri);margin-bottom:12px"><use href="#i-rocket"/></svg>
+    <h3>准备好升级安全防护了吗？</h3>
+    <p>无论是咨询功能、获取报价还是直接购买，我们都随时为您服务</p>
+    <div class="contact-cards">
+      <a href="mailto:lijie.xiaorui@qq.com?subject=智域WAF专业版授权咨询" class="contact-card">
+        <div class="ico email"><svg><use href="#i-mail"/></svg></div>
+        <div><div class="label">发送邮件</div><div class="value">lijie.xiaorui@qq.com</div></div>
+      </a>
+      <a href="https://github.com/JayLee-sre/ZHIYU-WAF" class="contact-card">
+        <div class="ico github"><svg><use href="#i-github"/></svg></div>
+        <div><div class="label">GitHub</div><div class="value">JayLee-sre/ZHIYU-WAF</div></div>
+      </a>
+      <a href="https://gitee.com/jack989800/ZhiYu-WAF" class="contact-card">
+        <div class="ico github"><svg><use href="#i-github"/></svg></div>
+        <div><div class="label">Gitee</div><div class="value">jack989800/ZhiYu-WAF</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/JayLee-sre/ZHIYU-WAF"><svg><use href="#i-github"/></svg> GitHub</a>
+    <a href="https://gitee.com/jack989800/ZhiYu-WAF"><svg><use href="#i-github"/></svg> Gitee</a>
+    <a href="#"><svg><use href="#i-link"/></svg> 文档</a>
+    <a href="#faq"><svg><use href="#i-help"/></svg> FAQ</a>
+    <a href="mailto:lijie.xiaorui@qq.com"><svg><use href="#i-mail"/></svg> 联系我们</a>
+  </div>
+  <p>© 2026 智域 WAF · 小睿科技 · AGPL-3.0 License</p>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feat, .how-step, .price-card, .test-card, .faq-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+
+function animateNum(el, target, suffix) {
+  let current = 0;
+  const step = target / 40;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.round(current) + (suffix || '');
+  }, 30);
+}
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.done) {
+      e.target.dataset.done = '1';
+      const nums = e.target.querySelectorAll('.stat-num');
+      animateNum(nums[0], 6, '+');
+      nums[1].textContent = '<2ms';
+      animateNum(nums[2], 247, '');
+      nums[3].textContent = '99.9%';
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.stats-grid').forEach(el => statObserver.observe(el));
+</script>
+</body>
+</html>
